@@ -13,6 +13,55 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 
+from .serializers import PostSerializer
+
+#------------ client to server : Method 1 ----------------#
+#------------ http://127.0.0.1:8000/index/1/ -------------#
+# @api_view(['GET','POST'])
+# def index(request, pk):
+#     #return HttpResponse('<h1>Welcome to Django<h1>')
+#     print(request.data)
+#     #return Response({'name': 'ALi Mohammadi'})  # it is dictionary
+#     #return Response({'name': 'ALi Mohammadi'}, status=status.HTTP_400_BAD_REQUEST)  # it is dictionary
+#     #return Response(dict(request.data))
+#     try:
+#         p = Post.objects.get(pk=pk)
+#     except Post.DoesNotExist:
+#         return Response({'detail': 'Post not exits'}, status=status.HTTP_404_NOT_FOUND)
+    
+#     serializer = PostSerializer(p)
+#     print(serializer)
+#     print('-' * 100)
+#     print(serializer.data)
+#     return Response(serializer.data)
+
+
+
+#------------ client to server : Method 2 ----------------#
+#------------ http://127.0.0.1:8000/index/?pk=1 -------------#
+# @api_view(['GET','POST'])
+# def index(request):
+#     #return HttpResponse('<h1>Welcome to Django<h1>')
+#     print(request.data)
+#     #return Response({'name': 'ALi Mohammadi'})  # it is dictionary
+#     #return Response({'name': 'ALi Mohammadi'}, status=status.HTTP_400_BAD_REQUEST)  # it is dictionary
+#     #return Response(dict(request.data))
+#     pk = request.query_params.get('pk')
+#     print(request.query_params)
+#     try:
+#         p = Post.objects.get(pk=pk)
+#     except Post.DoesNotExist:
+#         return Response({'detail': 'Post not exits'}, status=status.HTTP_404_NOT_FOUND)
+    
+#     serializer = PostSerializer(p)
+#     print(serializer)
+#     print('-' * 100)
+#     print(serializer.data)
+#     return Response(serializer.data)
+
+
+
+#------------ client to server : Method 3 ----------------#
 @api_view(['GET','POST'])
 def index(request):
     #return HttpResponse('<h1>Welcome to Django<h1>')
@@ -20,11 +69,20 @@ def index(request):
     #return Response({'name': 'ALi Mohammadi'})  # it is dictionary
     #return Response({'name': 'ALi Mohammadi'}, status=status.HTTP_400_BAD_REQUEST)  # it is dictionary
     #return Response(dict(request.data))
+    pk = request.data.get('pk')
+    print(request.data)
+
     try:
-        p = Post.objects.get(pk=100)
+        p = Post.objects.get(pk=pk)
     except Post.DoesNotExist:
         return Response({'detail': 'Post not exits'}, status=status.HTTP_404_NOT_FOUND)
-    
+    serializer = PostSerializer(p)
+    print(serializer)
+    print('-' * 100)
+    print(serializer.data)
+    return Response(serializer.data)
+
+
 
 def home(request):
     return HttpResponse('<h3>you are in home<h3>')
